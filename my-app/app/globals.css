@@ -1,26 +1,272 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  --bg: #0c0d10;
+  --panel: #121318;
+  --stage: #0e0f13;
+  --raised: #1c1e25;
+  --card: #15171d;
+  --neuron: #17191f;
+  --pill: #101116;
+  --line: #24262e;
+  --line-strong: #3b3e49;
+
+  --text: #eceae4;
+  --text-soft: #c2c1bb;
+  --muted: #8f8f8c;
+
+  /* One colour per idea, used the same way on every page. */
+  --signal: #5cc8f5; /* values moving forward */
+  --grad: #ffa94d; /* gradients moving backward */
+  --update: #63d68f; /* parameters changing */
+  --loss: #ff6b76; /* error */
+  --pos: #6d9fe8; /* positive weight */
+  --neg: #ec7a9c; /* negative weight */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-instrument-serif);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-weight: 400;
+}
+
+.stage-num {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+/* ---------- controls ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, transform 0.08s;
+}
+.btn:hover:not(:disabled) {
+  background: var(--raised);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.btn-primary {
+  height: 40px;
+  padding: 0 18px;
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+  font-weight: 600;
+}
+.btn-primary:hover:not(:disabled) {
+  background: #fff;
+}
+.btn-quiet {
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-soft);
+  padding: 0 9px;
+}
+.btn-small {
+  height: 32px;
+  padding: 0 10px;
+  font-size: 12.5px;
+}
+
+.control {
+  height: 34px;
+  padding: 0 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+}
+
+.segmented {
+  display: inline-flex;
+  width: fit-content;
+  padding: 2px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  background: var(--bg);
+}
+.segmented button {
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 12.5px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.segmented button:hover {
+  color: var(--text);
+}
+.segmented button[aria-pressed="true"] {
+  background: var(--raised);
+  color: var(--text);
+}
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  height: 32px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--bg);
+}
+.stepper button {
+  width: 30px;
+  height: 30px;
+  color: var(--text-soft);
+  font-size: 15px;
+  cursor: pointer;
+}
+.stepper button:hover:not(:disabled) {
+  color: var(--text);
+}
+.stepper button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.stepper span {
+  min-width: 20px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.icon-chip {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.icon-chip:hover {
+  background: var(--raised);
+  color: var(--text);
+}
+
+kbd {
+  padding: 1px 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: 5px;
+  background: var(--panel);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+/* ---------- stage motion ---------- */
+
+.dimmable {
+  transition: opacity 0.28s ease;
+}
+
+.scene-exit {
+  animation: scene-exit 0.2s ease-in forwards;
+}
+@keyframes scene-exit {
+  to {
+    opacity: 0;
+  }
+}
+
+.narration {
+  animation: narration-in 0.25s ease-out;
+}
+@keyframes narration-in {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+}
+
+/* Three chevrons marching in the direction the data is moving. */
+.flow-hint {
+  display: inline-flex;
+  gap: 3px;
+}
+.flow-hint i {
+  width: 6px;
+  height: 6px;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  animation: flow 1.1s infinite;
+}
+.flow-hint[data-dir="back"] {
+  flex-direction: row-reverse;
+}
+.flow-hint[data-dir="back"] i {
+  transform: rotate(-135deg);
+}
+.flow-hint i:nth-child(2) {
+  animation-delay: 0.16s;
+}
+.flow-hint i:nth-child(3) {
+  animation-delay: 0.32s;
+}
+@keyframes flow {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+.math-panel .katex-display {
+  margin: 0;
+  text-align: left;
+}
+.math-panel .katex-display > .katex {
+  text-align: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-hint i,
+  .narration,
+  .scene-exit {
+    animation: none;
+  }
+  .scene-exit {
+    opacity: 0;
+  }
+  .dimmable {
+    transition: none;
+  }
 }
