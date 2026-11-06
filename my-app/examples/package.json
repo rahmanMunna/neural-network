@@ -1,0 +1,30 @@
+{
+  "name": "neuron-notes-examples",
+  "private": true,
+  "type": "module",
+  "description": "Every code sample shown on the site. Run against real Redis, Postgres, RustFS and nginx.",
+  "scripts": {
+    "services": "docker compose up -d --wait",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test --test-concurrency=1 \"**/*.test.ts\""
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1163.0",
+    "@aws-sdk/lib-storage": "^3.1163.0",
+    "@aws-sdk/s3-request-presigner": "^3.1163.0",
+    "@fastify/cookie": "^11.1.5",
+    "argon2": "^0.45.2",
+    "bullmq": "^6.7.1",
+    "fastify": "^5.12.8",
+    "ioredis": "^6.0.0",
+    "jose": "^6.2.15",
+    "pg": "^8.23.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/pg": "^8.23.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

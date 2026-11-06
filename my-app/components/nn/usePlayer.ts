@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
-import type { Step } from "@/lib/nn/timeline";
 
 /**
  * Progress lives outside React state so a running animation re-renders only
@@ -35,9 +34,9 @@ export function useSettled(clock: Clock) {
 
 const HOLD_MS = 650;
 
-export interface PlayerState {
+export interface PlayerState<S = { duration: number }> {
   index: number;
-  step: Step;
+  step: S;
   playing: boolean;
   speed: number;
   clock: Clock;
@@ -50,7 +49,10 @@ export interface PlayerState {
   setSpeed: (s: number) => void;
 }
 
-export function usePlayer(steps: Step[], opts?: { autoPlay?: boolean; onFinish?: () => void }): PlayerState {
+export function usePlayer<S extends { duration: number }>(
+  steps: S[],
+  opts?: { autoPlay?: boolean; onFinish?: () => void },
+): PlayerState<S> {
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(opts?.autoPlay ?? false);
   const [speed, setSpeed] = useState(1);
@@ -84,7 +86,7 @@ export function usePlayer(steps: Step[], opts?: { autoPlay?: boolean; onFinish?:
     });
   }, [atEnd, clock]);
 
-  const step = steps[safeIndex];
+  const step = steps[safeIndex]!;
 
   // A new step, or a replay, rewinds. Changing speed or auto-play must not.
   useEffect(() => {

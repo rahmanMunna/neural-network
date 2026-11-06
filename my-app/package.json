@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test \"lib/**/*.test.ts\""
+    "test": "node --test \"lib/**/*.test.ts\"",
+    "snippets": "node scripts/gen-snippets.mjs",
+    "predev": "node scripts/gen-snippets.mjs",
+    "prebuild": "node scripts/gen-snippets.mjs",
+    "test:examples": "cd examples && npm test"
   },
   "dependencies": {
     "katex": "^0.16.47",

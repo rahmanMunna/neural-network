@@ -1,0 +1,43 @@
+# Local services used by every guide. Start them with: docker compose up -d --wait
+services:
+  redis:
+    image: redis:8-alpine
+    # BullMQ needs noeviction: an evicted job key would silently lose work.
+    command: ["redis-server", "--maxmemory-policy", "noeviction"]
+    ports: ["6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      retries: 15
+
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: app
+    ports: ["5433:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app"]
+      interval: 2s
+      retries: 15
+
+  rustfs:
+    image: rustfs/rustfs:1.0.4
+    environment:
+      RUSTFS_ACCESS_KEY: devaccess
+      RUSTFS_SECRET_KEY: devsecret123
+      RUSTFS_ADDRESS: ":9000"
+      RUSTFS_CONSOLE_ADDRESS: ":9001"
+      RUSTFS_CONSOLE_ENABLE: "true"
+    ports: ["9000:9000", "9001:9001"]
+    volumes: ["rustfs-data:/data"]
+
+  nginx:
+    image: nginx:1.29-alpine
+    volumes: ["./client-server/nginx.conf:/etc/nginx/conf.d/default.conf:ro"]
+    ports: ["8088:80"]
+    extra_hosts: ["host.docker.internal:host-gateway"]
+
+volumes:
+  rustfs-data:
